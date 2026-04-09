@@ -1,192 +1,215 @@
-# Order Instance Dataset README
+# Experimental Data Description
 
-## 1. Overview
-
-This file contains a synthetic order instance for experimental evaluation in an AP-related delivery scenario:
-
-`Expr1_order_instance_for_AP_(11_12)_orderNum_10_stationNum_3_lockerNum_1051_droneNum_20_seed_1.csv`
-
-The dataset records a set of delivery orders. Each row represents one order request, including:
-
-- the origin merchant (`store_id`)
-- the destination customer/home (`home_id`)
-- the geographic coordinates of both origin and destination
-
-This dataset can be used for research on:
-
-- drone delivery
-- parcel locker assignment
-- last-mile logistics optimization
-- order dispatching
-- route planning
-- simulation-based evaluation
+This folder contains the input data and generated experimental instances used in the computational experiments.
 
 ---
 
-## 2. File Naming Convention
+## 1. Folder Structure
 
-The file name encodes the main experimental settings:
+The main files and folders include:
 
-```text
-Expr1_order_instance_for_AP_(11_12)_orderNum_10_stationNum_3_lockerNum_1051_droneNum_20_seed_1.csv
-```
+- `parameters.txt`
+- `locker_info.csv`
+- `shenzhen_shopping_centers(candidate_drone_launching_stations).xlsx`
+- `order_instance_group_999/`
 
-### Naming Components
+The folder `order_instance_group_999` stores a batch of generated order instance files, such as:
 
-| Component | Meaning |
-|----------|---------|
-| `Expr1` | Experiment ID or experiment group |
-| `order_instance_for_AP` | Order instance generated for the AP scenario |
-| `(11_12)` | Scenario identifier, region index, or parameter setting label |
-| `orderNum_10` | Number of orders = 10 |
-| `stationNum_3` | Number of stations = 3 |
-| `lockerNum_1051` | Number of lockers = 1051 |
-| `droneNum_20` | Number of drones = 20 |
-| `seed_1` | Random seed used for instance generation = 1 |
+- `A_10_1.xlsx`, `A_10_2.xlsx`, ..., `A_10_10.xlsx`
+- `A_20_1.xlsx`, `A_20_2.xlsx`, ..., etc.
 
-> **Note:** The exact meaning of `AP` and `(11_12)` should be specified according to the corresponding project or experiment setup.
+Files such as `A_10_1.xlsx` are batch-generated instance files.
 
 ---
 
-## 3. File Format
+## 2. File and Folder Descriptions
 
-The file is stored in **CSV** format with the following header:
+### 2.1 `parameters(1).txt`
 
-```csv
-order_ID,store_id,home_id,org_lng,org_lat,des_lng,des_lat
-```
+This file records the main experimental parameters.
 
----
+Example contents:
+- `|K| = 50`: number of drones
+- `drone_speed = 36 km/h`
+- `delivery_person_speed = 20 km/h`
 
-## 4. Column Definitions
-
-| Column Name | Type | Description |
-|-------------|------|-------------|
-| `order_ID` | integer-like | Unique order identifier |
-| `store_id` | integer-like | Identifier of the origin store (merchant) |
-| `home_id` | integer-like | Identifier of the destination customer/home |
-| `org_lng` | float | Longitude of the order origin |
-| `org_lat` | float | Latitude of the order origin |
-| `des_lng` | float | Longitude of the order destination |
-| `des_lat` | float | Latitude of the order destination |
+These parameters define the basic operational setting of the experiments.
 
 ---
 
-## 5. Example Records
+### 2.2 `locker_info.csv`
 
-```csv
-order_ID,store_id,home_id,org_lng,org_lat,des_lng,des_lat
-1,4402,25119,114.04328064244112,22.644065642441127,114.02754198425365,22.62832698425365
-2,17629,13590,114.1100671210133,22.5495051210133,114.13188248195249,22.571320481952498
-3,12685,10163,114.04703739051003,22.640104390510036,114.0301082481606,22.623175248160603
-4,19116,11157,114.11052102654651,22.549959026546517,114.12303142474425,22.56246942474426
-5,7613,20445,114.04426046763169,22.645045467631697,114.0659001420401,22.666685142040112
-```
+This file contains the parcel locker information used in all instances.
 
----
+#### Columns
+- `locker_ID`: unique locker ID
+- `locker_name`: locker name
+- `lng`: longitude
+- `lat`: latitude
 
-## 6. Record Semantics
-
-Each row corresponds to one delivery order:
-
-- the order is identified by a unique `order_ID`
-- the order originates from a merchant represented by `store_id`
-- the delivery destination is a customer/home represented by `home_id`
-- `org_lng` and `org_lat` specify the origin coordinates
-- `des_lng` and `des_lat` specify the destination coordinates
-
-Therefore, each record can be interpreted as an **origin-destination (OD) demand pair** for delivery planning.
+#### Notes
+- The locker set is fixed across all generated instances.
+- Locker locations are based on real geographic data.
 
 ---
 
-## 7. Instance Configuration
+### 2.3 `shenzhen_shopping_centers(candidate_drone_launching_stations).xlsx`
 
-According to the file name, this dataset instance contains:
+This file contains the candidate shopping centers used as potential drone launching stations.
 
-- **Number of orders:** 10
-- **Number of stations:** 3
-- **Number of lockers:** 1051
-- **Number of drones:** 20
-- **Random seed:** 1
+#### Columns
+- `shopping_center_name`: shopping center name
+- `lng`: longitude
+- `lat`: latitude
 
----
-
-## 8. Notes
-
-### 8.1 Identifier Format
-
-The fields `order_ID`, `store_id`, and `home_id` should be interpreted as identifiers rather than continuous numeric values.
-
-In some CSV readers, these fields may still be loaded as floating-point numbers depending on the original file format or parsing behavior. If needed, users may convert them to integer type after loading the file.
-
-### 8.2 Order ID Assignment
-
-The `order_ID` field has been assigned as a unique ascending identifier for each order record. This makes the dataset easier to process, reference, and validate in downstream experiments and simulations.
-
-### 8.3 Geographic Coordinates
-
-The coordinate fields are represented in decimal degrees.
-
-Before performing:
-
-- distance calculation
-- map matching
-- shortest path computation
-- geographic visualization
-
-please verify that the coordinate reference system is consistent with the tools or map services being used.
-
-### 8.4 Reproducibility
-
-The suffix `seed_1` indicates that this instance was generated using **random seed 1**.  
-To reproduce the same dataset, the same generation parameters and random seed should be used.
+#### Notes
+- These shopping centers form the candidate station pool.
+- The station set in each instance is selected from this file.
 
 ---
 
-## 9. Recommended Loading Method
+### 2.4 `order_instance_group_999/`
 
-### Python Example
+This folder contains a batch of generated experimental instance files.
 
-```python
-import pandas as pd
+Each file in this folder corresponds to one specific instance and includes:
+1. selected drone launching stations;
+2. generated customer orders.
 
-file_path = "Expr1_order_instance_for_AP_(11_12)_orderNum_10_stationNum_3_lockerNum_1051_droneNum_20_seed_1.csv"
-df = pd.read_csv(file_path)
+Typical files include:
+- `A_10_1.xlsx`
+- `A_10_2.xlsx`
+- ...
+- `A_20_1.xlsx`
+- `A_20_2.xlsx`
 
-# Convert identifier columns to integers if needed
-df["order_ID"] = df["order_ID"].astype(int)
-df["store_id"] = df["store_id"].astype(int)
-df["home_id"] = df["home_id"].astype(int)
-
-print(df.head())
-print("Number of records:", len(df))
-```
+Among them, `A_10_1.xlsx` is one batch-generated instance file.
 
 ---
 
-## 10. Potential Applications
+## 3. Instance File Format
 
-This dataset is suitable for research and experiments in:
+Each instance file in `order_instance_group_999/` contains two parts.
 
-- drone delivery planning
-- last-mile logistics optimization
-- parcel locker assignment
-- order allocation and dispatching
-- multi-resource collaborative delivery
-- route planning and simulation
+### 3.1 Station information
 
----
+The first part records the selected stations.
 
-## 11. Version Information
+#### Columns
+- `station_ID`: unique station ID
+- `station_name`: station name
+- `lng`: longitude
+- `lat`: latitude
 
-| Item | Value |
-|------|-------|
-| File format | CSV |
-| Recommended encoding | UTF-8 |
-| Instance seed | 1 |
+This part specifies the drone launching stations used in the instance.
 
 ---
 
-## 12. Citation
+### 3.2 Order information
 
-If this dataset is used in a research project, thesis, or publication, please cite the corresponding paper, repository, or technical report that describes the data generation process and experimental setting.
+The second part records the generated orders.
+
+#### Columns
+- `order_ID`: unique order ID
+- `org_lng`: longitude of the order origin
+- `org_lat`: latitude of the order origin
+- `des_lng`: longitude of the order destination
+- `des_lat`: latitude of the order destination
+- `start_time_in_minute`: order start time in minutes
+
+This part specifies the delivery requests in the instance.
+
+---
+
+## 4. Naming Rule of Instance Files
+
+The instance files follow the naming format:
+
+`A_x_y.xlsx`
+
+where:
+
+- `x`: number of orders in the instance
+- `y`: instance index under the same order size
+
+For example:
+
+- `A_10_1.xlsx`: the 1st instance with 10 orders
+- `A_10_8.xlsx`: the 8th instance with 10 orders
+- `A_20_1.xlsx`: the 1st instance with 20 orders
+
+Therefore, files with the same first number belong to the same size group, while the second number distinguishes different randomly generated samples.
+
+---
+
+## 5. Data Generation Logic
+
+The instance data are generated based on real geographic information.
+
+### Step 1: Candidate stations
+Candidate stations are taken from the shopping center dataset.
+
+### Step 2: Locker setting
+The locker set is fixed and directly taken from `locker_info.csv`.
+
+### Step 3: Station selection
+A subset of shopping centers is selected as drone launching stations for each instance.
+
+### Step 4: Order generation
+For each order:
+- an origin and a destination are generated;
+- the origin must be reachable from at least one selected station;
+- the destination must be reachable to at least one locker.
+
+Only feasible orders are retained.
+
+### Step 5: Time assignment
+Each feasible order is assigned a random start time within the decision period, recorded in minutes.
+
+---
+
+## 6. Example: `A_10_1.xlsx`
+
+This file is one generated instance in `order_instance_group_999/`.
+
+It contains:
+- a station set;
+- an order set.
+
+### Example station records
+| station_ID | station_name        | lng        | lat       |
+|------------|---------------------|------------|-----------|
+| 0          | shopping_center_69  | 114.046937 | 22.647722 |
+| 1          | shopping_center_399 | 114.048166 | 22.641233 |
+| 2          | shopping_center_194 | 114.109687 | 22.549125 |
+
+### Example order records
+| order_ID | org_lng       | org_lat       | des_lng       | des_lat       | start_time_in_minute |
+|----------|---------------|---------------|---------------|---------------|----------------------|
+| 0        | 114.043280642 | 22.644065642  | 114.027541984 | 22.628326984  | 668                  |
+| 1        | 114.110067121 | 22.549505121  | 114.131882482 | 22.571320482  | 694                  |
+| 2        | 114.047037391 | 22.640104391  | 114.030108248 | 22.623175248  | 684                  |
+
+---
+
+## 7. Notes
+
+1. Longitude and latitude are given in geographic coordinates.
+2. Geographic distances should be computed using an appropriate distance formula when needed.
+3. The locker dataset is fixed for all instances.
+4. Station sets and order sets vary across different instance files.
+5. The folder `order_instance_group_999` is a collection of batch-generated instances.
+
+---
+
+## 8. Summary
+
+In summary:
+
+- `parameters(1).txt` stores the main experimental parameters;
+- `locker_info.csv` stores the fixed locker data;
+- `shenzhen_shopping_centers(candidate_drone_launching_stations).xlsx` stores the candidate station data;
+- `order_instance_group_999/` stores the generated instance files;
+- files such as `A_10_1.xlsx` are individual batch-generated instance files containing both station and order information.
+
+These files together form the complete dataset for the computational experiments.
